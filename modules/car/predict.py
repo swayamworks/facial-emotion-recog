@@ -30,8 +30,7 @@ def is_blue_car(car_image):
 
     blue_ratio = blue_pixels / total_pixels
 
-    # Lowered threshold to 1% because dark blue cars have very few bright blue pixels
-    return blue_ratio > 0.01
+    return blue_ratio > 0.10
 
 
 def create_box(image, x1, y1, x2, y2, color):
