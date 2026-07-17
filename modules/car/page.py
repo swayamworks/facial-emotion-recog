@@ -7,7 +7,7 @@ from PIL import Image
 # Import the user's EXACT original detector code
 from modules.car.detector import process_image
 
-def show_page():
+def render_page():
     st.title("Car Detection Module")
     st.markdown("Upload an image to detect cars and people.")
 
