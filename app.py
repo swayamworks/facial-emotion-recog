@@ -1,15 +1,5 @@
 import streamlit as st
 
-# -- STREAMLIT CLOUD FIX --
-# ultralytics force-installs opencv-python (heavy), which conflicts with
-# opencv-python-headless. Both packages share the same cv2 namespace and
-# coexisting causes a segfault during image processing. We unconditionally
-# remove the heavy version on startup so only headless remains.
-import subprocess, sys
-subprocess.run(
-    [sys.executable, "-m", "pip", "uninstall", "-y", "opencv-python"],
-    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-)
 
 import os
 from PIL import Image
