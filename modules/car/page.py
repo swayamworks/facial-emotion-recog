@@ -15,12 +15,14 @@ def render_page():
 
     if uploaded_file is not None:
         
-        # Save the uploaded file to disk so OpenCV can read it exactly like in the terminal
-        temp_input = Path("temp_input.jpg")
-        temp_output = Path("temp_output.jpg")
-        
-        with open(temp_input, "wb") as f:
-            f.write(uploaded_file.getbuffer())
+        # Create unique temporary files that automatically clean themselves up
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as tmp_in, \
+             tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as tmp_out:
+            
+            temp_input = tmp_in.name
+            temp_output = tmp_out.name
+            
+            tmp_in.write(uploaded_file.getbuffer())
 
         st.image(uploaded_file, caption="Original Image", use_container_width=True)
 
@@ -43,3 +45,10 @@ def render_page():
                 
             except Exception as e:
                 st.error(f"Detection failed.\n\n{e}")
+                
+            finally:
+                # Always clean up the files so the server doesn't run out of disk space
+                if os.path.exists(temp_input):
+                    os.remove(temp_input)
+                if os.path.exists(temp_output):
+                    os.remove(temp_output)
