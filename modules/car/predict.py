@@ -16,8 +16,8 @@ def is_blue_car(car_image):
     # Convert RGB to HSV
     hsv = cv2.cvtColor(car_image, cv2.COLOR_RGB2HSV)
 
-    # Define range of blue color in HSV
-    lower_blue = (100, 100, 50)
+    # Define range of blue color in HSV (lowered saturation to catch dull/shadowy blue cars)
+    lower_blue = (100, 30, 40)
     upper_blue = (140, 255, 255)
 
     mask = cv2.inRange(hsv, lower_blue, upper_blue)
