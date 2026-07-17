@@ -10,6 +10,7 @@ st.set_page_config(
 
 # Import the module pages
 from modules.emotion.page import render_page as render_emotion_page
+from modules.car.page import render_page as render_car_page
 
 def render_home():
     st.title("👁️ MultiVision AI Assistant")
@@ -22,6 +23,7 @@ def render_home():
     st.info(
         "**Available Modules:**\n"
         "- 🎭 **Emotion Detector:** Predicts human emotions from facial expressions using CNNs.\n"
+        "- 🚗 **Car Color:** Detects cars and people, highlighting blue cars using YOLOv8.\n"
         "- *(More modules coming soon)*"
     )
 
@@ -38,6 +40,8 @@ def main():
         render_home()
     elif page == "Facial Emotion":
         render_emotion_page()
+    elif page == "Car Color":
+        render_car_page()
     else:
         st.title(page)
         st.warning(f"The {page} module is currently under development! Please check back later.")
