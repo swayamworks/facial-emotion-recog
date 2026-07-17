@@ -1,9 +1,5 @@
 import streamlit as st
 
-
-import os
-from PIL import Image
-
 # Setup page config once at the top level
 st.set_page_config(
     page_title="MultiVision AI Assistant",
@@ -11,10 +7,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
-
-# Import the module pages
-from modules.emotion.page import render_page as render_emotion_page
-from modules.car.page import render_page as render_car_page
 
 def render_home():
     st.title("👁️ MultiVision AI Assistant")
@@ -43,8 +35,12 @@ def main():
     if page == "Home":
         render_home()
     elif page == "Facial Emotion":
+        # Lazy import — TensorFlow only loads when user clicks this tab
+        from modules.emotion.page import render_page as render_emotion_page
         render_emotion_page()
     elif page == "Car Color":
+        # Lazy import — YOLO/OpenCV only loads when user clicks this tab
+        from modules.car.page import render_page as render_car_page
         render_car_page()
     else:
         st.title(page)
