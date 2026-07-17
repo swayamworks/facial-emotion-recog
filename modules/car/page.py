@@ -43,8 +43,9 @@ def render_page():
     try:
         # Load image with PIL
         pil_image = Image.open(uploaded_file)
-        # Convert to numpy array (RGB)
-        image_np = np.array(pil_image.convert("RGB"))
+        # Convert to numpy array (RGB) and then to BGR for OpenCV
+        image_rgb = np.array(pil_image.convert("RGB"))
+        image_bgr = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2BGR)
     except UnidentifiedImageError:
         st.error("Invalid image.")
         return
@@ -54,7 +55,9 @@ def render_page():
 
     with st.spinner("Running YOLOv8 Object Detection..."):
         try:
-            annotated_image, car_count, person_count = detect_car_colors(image_np)
+            annotated_image_bgr, car_count, person_count = detect_car_colors(image_bgr)
+            # Convert back to RGB for Streamlit display
+            annotated_image_rgb = cv2.cvtColor(annotated_image_bgr, cv2.COLOR_BGR2RGB)
         except Exception as e:
             st.error(f"Prediction failed.\n\n{e}")
             return
@@ -74,11 +77,11 @@ def render_page():
     
     with col1:
         st.write("**Original Image**")
-        st.image(image_np, use_container_width=True)
+        st.image(image_rgb, use_container_width=True)
 
     with col2:
         st.write("**Annotated Output**")
-        st.image(annotated_image, use_container_width=True)
+        st.image(annotated_image_rgb, use_container_width=True)
 
     st.divider()
     st.caption("Developed by Swayam Netke")

@@ -13,7 +13,7 @@ def is_blue_car(car_image):
     if car_image.size == 0:
         return False
 
-    hsv = cv2.cvtColor(car_image, cv2.COLOR_RGB2HSV)
+    hsv = cv2.cvtColor(car_image, cv2.COLOR_BGR2HSV)
 
     # Define range of blue color in HSV
     lower_blue = (100, 100, 50)
@@ -72,25 +72,25 @@ def detect_car_colors(image: np.ndarray):
         # 0 corresponds to 'person' in COCO dataset
         if class_id == 0:
             person_count += 1
-            # Draw green box for people
+            # Draw green box for people (BGR format: 0,255,0)
             create_box(annotated_image, x1, y1, x2, y2, (0, 255, 0))
 
         # 2 corresponds to 'car' in COCO dataset
         elif class_id == 2:
             car_count += 1
 
-            # Crop the car for color analysis
-            car_crop = annotated_image[
+            # Crop the car for color analysis from the clean original image
+            car_crop = image[
                 int(y1):int(y2),
                 int(x1):int(x2)
             ]
 
             # Check if car is blue
             if is_blue_car(car_crop):
-                # Red box for blue cars (RGB format)
-                create_box(annotated_image, x1, y1, x2, y2, (255, 0, 0))
-            else:
-                # Blue box for other cars (RGB format)
+                # Red box for blue cars (BGR format: 0,0,255)
                 create_box(annotated_image, x1, y1, x2, y2, (0, 0, 255))
+            else:
+                # Blue box for other cars (BGR format: 255,0,0)
+                create_box(annotated_image, x1, y1, x2, y2, (255, 0, 0))
 
     return annotated_image, car_count, person_count
