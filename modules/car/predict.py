@@ -13,7 +13,8 @@ def is_blue_car(car_image):
     if car_image.size == 0:
         return False
 
-    hsv = cv2.cvtColor(car_image, cv2.COLOR_BGR2HSV)
+    # Convert RGB to HSV
+    hsv = cv2.cvtColor(car_image, cv2.COLOR_RGB2HSV)
 
     # Define range of blue color in HSV
     lower_blue = (100, 100, 50)
@@ -28,7 +29,9 @@ def is_blue_car(car_image):
         return False
 
     blue_ratio = blue_pixels / total_pixels
-    return blue_ratio > 0.10
+
+    # Lowered threshold to 1% because dark blue cars have very few bright blue pixels
+    return blue_ratio > 0.01
 
 
 def create_box(image, x1, y1, x2, y2, color):
@@ -87,10 +90,10 @@ def detect_car_colors(image: np.ndarray):
 
             # Check if car is blue
             if is_blue_car(car_crop):
-                # Red box for blue cars (BGR format: 0,0,255)
-                create_box(annotated_image, x1, y1, x2, y2, (0, 0, 255))
-            else:
-                # Blue box for other cars (BGR format: 255,0,0)
+                # Red box for blue cars (RGB format: 255,0,0)
                 create_box(annotated_image, x1, y1, x2, y2, (255, 0, 0))
+            else:
+                # Blue box for other cars (RGB format: 0,0,255)
+                create_box(annotated_image, x1, y1, x2, y2, (0, 0, 255))
 
     return annotated_image, car_count, person_count

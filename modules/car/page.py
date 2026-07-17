@@ -2,6 +2,7 @@ import streamlit as st
 import numpy as np
 from PIL import Image, UnidentifiedImageError
 from modules.car.predict import detect_car_colors
+import cv2
 
 def render_sidebar():
     with st.sidebar:
@@ -43,9 +44,8 @@ def render_page():
     try:
         # Load image with PIL
         pil_image = Image.open(uploaded_file)
-        # Convert to numpy array (RGB) and then to BGR for OpenCV
+        # Convert to numpy array (RGB)
         image_rgb = np.array(pil_image.convert("RGB"))
-        image_bgr = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2BGR)
     except UnidentifiedImageError:
         st.error("Invalid image.")
         return
@@ -55,9 +55,7 @@ def render_page():
 
     with st.spinner("Running YOLOv8 Object Detection..."):
         try:
-            annotated_image_bgr, car_count, person_count = detect_car_colors(image_bgr)
-            # Convert back to RGB for Streamlit display
-            annotated_image_rgb = cv2.cvtColor(annotated_image_bgr, cv2.COLOR_BGR2RGB)
+            annotated_image_rgb, car_count, person_count = detect_car_colors(image_rgb)
         except Exception as e:
             st.error(f"Prediction failed.\n\n{e}")
             return
