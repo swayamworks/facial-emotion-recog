@@ -1,15 +1,15 @@
 import streamlit as st
 
-# -- STREAMLIT CLOUD HACK --
-# Streamlit Cloud's apt-get is currently broken for libglib2.0, causing OpenCV to crash.
-# We intercept the crash and force-replace OpenCV with the headless version.
-try:
-    import cv2
-except ImportError:
-    import subprocess
-    import sys
-    subprocess.run([sys.executable, "-m", "pip", "uninstall", "-y", "opencv-python", "opencv-python-headless"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    subprocess.run([sys.executable, "-m", "pip", "install", "opencv-python-headless"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+# -- STREAMLIT CLOUD FIX --
+# ultralytics force-installs opencv-python (heavy), which conflicts with
+# opencv-python-headless. Both packages share the same cv2 namespace and
+# coexisting causes a segfault during image processing. We unconditionally
+# remove the heavy version on startup so only headless remains.
+import subprocess, sys
+subprocess.run(
+    [sys.executable, "-m", "pip", "uninstall", "-y", "opencv-python"],
+    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+)
 
 import os
 from PIL import Image
