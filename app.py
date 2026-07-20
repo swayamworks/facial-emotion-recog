@@ -19,6 +19,7 @@ def render_home():
     st.info(
         "**Available Modules:**\n"
         "- 🎭 **Emotion Detector:** Predicts human emotions from facial expressions using CNNs.\n"
+        "- 🐾 **Animal Detection:** Detects 80 animal species using a custom-trained YOLOv8 model.\n"
         "- 🚗 **Car Color:** Detects cars and people, highlighting blue cars using YOLOv8.\n"
         "- *(More modules coming soon)*"
     )
@@ -38,6 +39,10 @@ def main():
         # Lazy import — TensorFlow only loads when user clicks this tab
         from modules.emotion.page import render_page as render_emotion_page
         render_emotion_page()
+    elif page == "Animal Detection":
+        # Lazy import — YOLO/OpenCV only loads when user clicks this tab
+        from modules.animal.page import render_page as render_animal_page
+        render_animal_page()
     elif page == "Car Color":
         # Lazy import — YOLO/OpenCV only loads when user clicks this tab
         from modules.car.page import render_page as render_car_page
