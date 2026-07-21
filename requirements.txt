@@ -3,3 +3,7 @@ numpy
 Pillow
 ultralytics
 tensorflow-cpu
+librosa
+joblib
+scikit-learn
+xgboost

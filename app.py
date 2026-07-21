@@ -21,6 +21,7 @@ def render_home():
         "- 🎭 **Emotion Detector:** Predicts human emotions from facial expressions using CNNs.\n"
         "- 🐾 **Animal Detection:** Detects 80 animal species using a custom-trained YOLOv8 model.\n"
         "- 🚗 **Car Color:** Detects cars and people, highlighting blue cars using YOLOv8.\n"
+        "- 🎙️ **Voice Emotion:** Detects gender and emotion from speech using ML classifiers.\n"
         "- *(More modules coming soon)*"
     )
 
@@ -47,6 +48,10 @@ def main():
         # Lazy import — YOLO/OpenCV only loads when user clicks this tab
         from modules.car.page import render_page as render_car_page
         render_car_page()
+    elif page == "Voice Emotion":
+        # Lazy import — librosa/sklearn only loads when user clicks this tab
+        from modules.voice.page import render_page as render_voice_page
+        render_voice_page()
     else:
         st.title(page)
         st.warning(f"The {page} module is currently under development! Please check back later.")
