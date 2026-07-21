@@ -17,6 +17,10 @@ from ui_components import (
     render_inference_time,
     render_footer,
     ACCENT_COLORS,
+    upload_card,
+    close_upload_card,
+    render_progress_steps,
+    render_workflow_summary,
 )
 
 ACCENT = ACCENT_COLORS["emotion"]
@@ -52,7 +56,10 @@ def render_page():
     if model is None:
         st.stop()
 
+    render_workflow_summary("Upload a face image to classify the dominant visible expression and review the model confidence across all emotion classes.", ["Face image", "CNN", "RAF-DB", "7 emotion classes"])
+    upload_card("Upload a face image", "JPG · JPEG · PNG", "😊")
     uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
+    close_upload_card()
 
     if uploaded_file is None:
         render_empty_state("📸", "Upload a face image to begin analysis", "JPG · JPEG · PNG")
@@ -86,6 +93,7 @@ def render_page():
         st.error(f"Prediction failed.\n\n{e}")
         return
     elapsed = time.time() - start
+    render_progress_steps([("Face image prepared", True), ("Emotion prediction complete", True)])
 
     # Results
     col_img, col_result = st.columns([1, 1], gap="large")

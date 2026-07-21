@@ -15,6 +15,10 @@ from ui_components import (
     render_inference_time,
     render_footer,
     ACCENT_COLORS,
+    upload_card,
+    close_upload_card,
+    render_progress_steps,
+    render_workflow_summary,
 )
 
 ACCENT = ACCENT_COLORS["animal"]
@@ -23,7 +27,10 @@ ACCENT = ACCENT_COLORS["animal"]
 def render_page():
     render_hero("🐾", "Animal Detection", "Detect 80 animal species using a custom-trained YOLOv8 model.")
 
+    render_workflow_summary("Upload an image and receive an annotated result with detected species and a concise object count.", ["Image input", "YOLOv8", "80 species", "Bounding boxes"])
+    upload_card("Upload an image", "JPG · JPEG · PNG", "🐾")
     uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
+    close_upload_card()
 
     if uploaded_file is None:
         render_empty_state("🖼️", "Upload an image to begin detection", "JPG · JPEG · PNG")
@@ -49,6 +56,7 @@ def render_page():
         try:
             animal_counts = process_image(temp_input, temp_output)
             elapsed = time.time() - start
+            render_progress_steps([("Image prepared", True), ("Animal detection complete", True)])
 
             # Display images side by side
             col1, col2 = st.columns(2, gap="medium")

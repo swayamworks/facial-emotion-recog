@@ -15,6 +15,10 @@ from ui_components import (
     render_inference_time,
     render_footer,
     ACCENT_COLORS,
+    upload_card,
+    close_upload_card,
+    render_progress_steps,
+    render_workflow_summary,
 )
 
 ACCENT = ACCENT_COLORS["car"]
@@ -23,7 +27,10 @@ ACCENT = ACCENT_COLORS["car"]
 def render_page():
     render_hero("🚗", "Vehicle Color Detection", "Detect cars and people, highlighting blue vehicles using YOLOv8.")
 
+    render_workflow_summary("A focused road-scene analyser that detects cars and people, then identifies blue vehicles through HSV colour analysis.", ["Image input", "YOLOv8n", "COCO classes", "HSV colour analysis"])
+    upload_card("Upload an image", "JPG · JPEG · PNG", "🚗")
     uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
+    close_upload_card()
 
     if uploaded_file is None:
         render_empty_state("🖼️", "Upload an image to begin detection", "JPG · JPEG · PNG")
@@ -50,6 +57,7 @@ def render_page():
             # Run the exact original logic from detector.py
             car_count, person_count = process_image(temp_input, temp_output)
             elapsed = time.time() - start
+            render_progress_steps([("Objects detected", True), ("Vehicle color analysis complete", True)])
 
             # Display images side by side
             col1, col2 = st.columns(2, gap="medium")
